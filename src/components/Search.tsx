@@ -97,7 +97,7 @@ const Search = () => {
         onDelete={handleDelete}
       />
 
-      <Box sx={{ mt: 2 }}>
+      <Box sx={{ mt: 2, textAlign: 'right' }}>
         <Button
           variant='contained'
           color='error'
@@ -108,7 +108,7 @@ const Search = () => {
         </Button>
 
         <Button type='submit' variant='contained' disabled={isFetching}>
-          {isFetching ? <CircularProgress /> : 'Search'}
+          {isFetching ? <CircularProgress size={26} /> : 'Search'}
         </Button>
       </Box>
     </Box>

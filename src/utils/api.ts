@@ -38,6 +38,6 @@ export const search = async (
 
   if (!response.ok) throw new Error('Error fetching data');
 
-  const { features } = await response.json();
-  return features;
+  const data = await response.json();
+  return data;
 };

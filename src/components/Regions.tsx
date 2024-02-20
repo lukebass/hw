@@ -34,25 +34,33 @@ const Regions: React.FC<RegionsProps> = ({
 }) => {
   const regions = useMemo(
     () =>
-      selected.map(({ id, geometry: { coordinates } }) => (
-        <TableRow key={id}>
-          <TableCell>{id}</TableCell>
-          <TableCell>
-            <Stack spacing={1}>
-              {coordinates[0].map((coords, key) => (
-                <Chip
-                  key={key}
-                  color='primary'
-                  variant='outlined'
-                  label={coords
-                    .map((coord) => coord.toString().substring(0, 10))
-                    .join(', ')}
-                />
-              ))}
-            </Stack>
+      selected.length ? (
+        selected.map(({ id, geometry: { coordinates } }) => (
+          <TableRow key={id}>
+            <TableCell>{id}</TableCell>
+            <TableCell>
+              <Stack spacing={1}>
+                {coordinates[0].map((coords, key) => (
+                  <Chip
+                    key={key}
+                    color='primary'
+                    variant='outlined'
+                    label={coords
+                      .map((coord) => coord.toString().substring(0, 10))
+                      .join(', ')}
+                  />
+                ))}
+              </Stack>
+            </TableCell>
+          </TableRow>
+        ))
+      ) : (
+        <TableRow>
+          <TableCell colSpan={2} align='center'>
+            No regions selected!
           </TableCell>
         </TableRow>
-      )),
+      ),
     [selected]
   );
 
@@ -70,7 +78,7 @@ const Regions: React.FC<RegionsProps> = ({
               longitude: -123.1207,
               zoom: 8,
             }}
-            style={{ height: 600 }}
+            style={{ height: 400 }}
             mapStyle='mapbox://styles/mapbox/streets-v9'
             mapboxAccessToken={import.meta.env.VITE_MAP_TOKEN}
           >
