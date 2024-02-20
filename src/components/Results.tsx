@@ -1,7 +1,11 @@
+import { useContext } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import Map from 'react-map-gl';
+import DataContext from '../context/Data';
 
 const Results = () => {
+  const { data, error } = useContext(DataContext);
+  console.log(data);
   return (
     <Box sx={{ my: 4 }}>
       <Typography variant='h6' sx={{ mb: 2 }}>

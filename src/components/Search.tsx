@@ -1,5 +1,5 @@
 import { useState, useContext, useCallback } from 'react';
-import { Button, Box } from '@mui/material';
+import { Button, Box, CircularProgress } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { Feature, Polygon } from 'geojson';
 import DataContext from '../context/Data';
@@ -11,14 +11,12 @@ export interface Form {
   endDate: Dayjs | null;
 }
 
-const initial = {
-  startDate: null,
-  endDate: null,
-};
-
 const Search = () => {
-  const { fetchData } = useContext(DataContext);
-  const [form, setForm] = useState<Form>(initial);
+  const { fetchData, isFetching } = useContext(DataContext);
+  const [form, setForm] = useState<Form>({
+    startDate: null,
+    endDate: null,
+  });
   const [features, setFeatures] = useState<Feature<Polygon>[]>([]);
 
   const handleCreate = useCallback(
@@ -59,7 +57,7 @@ const Search = () => {
   };
 
   const handleClear = () => {
-    setForm(initial);
+    setForm({ startDate: null, endDate: null });
     setFeatures([]);
   };
 
@@ -72,8 +70,22 @@ const Search = () => {
     <Box component='form' onSubmit={handleSubmit} sx={{ my: 4 }}>
       <Dates
         title='Date Range'
-        start={{ id: 'startDate', value: form.startDate }}
-        end={{ id: 'endDate', value: form.endDate }}
+        start={{
+          id: 'startDate',
+          value: form.startDate,
+          props: {
+            required: true,
+            helperText: 'This field is required',
+          },
+        }}
+        end={{
+          id: 'endDate',
+          value: form.endDate,
+          props: {
+            required: true,
+            helperText: 'This field is required',
+          },
+        }}
         onChange={handleChange}
       />
 
@@ -95,8 +107,8 @@ const Search = () => {
           Clear
         </Button>
 
-        <Button type='submit' variant='contained'>
-          Search
+        <Button type='submit' variant='contained' disabled={isFetching}>
+          {isFetching ? <CircularProgress /> : 'Search'}
         </Button>
       </Box>
     </Box>
