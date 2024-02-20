@@ -1,25 +1,31 @@
 import { createContext, useState } from 'react';
 import { search } from '../utils/api';
 import { Form } from '../components/Search';
-import { Feature, Polygon } from 'geojson';
+import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { transform } from '../utils/transform';
 
 interface Data {
-  data: object[];
+  data: FeatureCollection<Polygon>;
   error: string | null;
   fetchData: (form: Form, feature: Feature<Polygon>) => void;
   isFetching: boolean;
 }
 
 const DataContext = createContext<Data>({
-  data: [],
+  data: {
+    type: 'FeatureCollection',
+    features: [],
+  },
   error: null,
   fetchData: () => {},
   isFetching: false,
 });
 
 const DataProvider = ({ children }: { children: React.ReactElement }) => {
-  const [data, setData] = useState<object[]>([]);
+  const [data, setData] = useState<FeatureCollection<Polygon>>({
+    type: 'FeatureCollection',
+    features: [],
+  });
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 

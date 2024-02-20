@@ -10,6 +10,8 @@ import {
   TableCell,
   TableBody,
   Paper,
+  Chip,
+  Stack,
 } from '@mui/material';
 import Map, { GeolocateControl } from 'react-map-gl';
 import { Feature, Polygon } from 'geojson';
@@ -32,15 +34,25 @@ const Regions: React.FC<RegionsProps> = ({
 }) => {
   const regions = useMemo(
     () =>
-      selected.map(({ id, geometry: { coordinates } }) =>
-        coordinates[0].map((coordinate, key) => (
-          <TableRow key={`${id}-${key}`}>
-            <TableCell>{id}</TableCell>
-            <TableCell>{coordinate[0]}</TableCell>
-            <TableCell>{coordinate[1]}</TableCell>
-          </TableRow>
-        ))
-      ),
+      selected.map(({ id, geometry: { coordinates } }) => (
+        <TableRow key={id}>
+          <TableCell>{id}</TableCell>
+          <TableCell>
+            <Stack spacing={1}>
+              {coordinates[0].map((coords, key) => (
+                <Chip
+                  key={key}
+                  color='primary'
+                  variant='outlined'
+                  label={coords
+                    .map((coord) => coord.toString().substring(0, 10))
+                    .join(', ')}
+                />
+              ))}
+            </Stack>
+          </TableCell>
+        </TableRow>
+      )),
     [selected]
   );
 
@@ -54,9 +66,9 @@ const Regions: React.FC<RegionsProps> = ({
         <Grid item xs={12} sm={6}>
           <Map
             initialViewState={{
-              latitude: 37.8,
-              longitude: -122.4,
-              zoom: 14,
+              latitude: 49.2827,
+              longitude: -123.1207,
+              zoom: 8,
             }}
             style={{ height: 600 }}
             mapStyle='mapbox://styles/mapbox/streets-v9'
@@ -80,8 +92,7 @@ const Regions: React.FC<RegionsProps> = ({
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell>Latitude</TableCell>
-                  <TableCell>Longitude</TableCell>
+                  <TableCell>Coordinates</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>{regions}</TableBody>

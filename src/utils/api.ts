@@ -1,4 +1,4 @@
-import { Feature, Polygon } from 'geojson';
+import { FeatureCollection, Polygon } from 'geojson';
 import { SearchParams } from './transform';
 
 export const genToken = async (): Promise<string> => {
@@ -23,7 +23,7 @@ export const genToken = async (): Promise<string> => {
 
 export const search = async (
   params: SearchParams
-): Promise<Feature<Polygon>[]> => {
+): Promise<FeatureCollection<Polygon>> => {
   let token = localStorage.getItem('access_token');
   if (!token) token = await genToken();
 
