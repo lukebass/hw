@@ -1,9 +1,10 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useCallback } from 'react';
 import { Button, Box } from '@mui/material';
 import { Dayjs } from 'dayjs';
+import { Feature } from 'geojson';
 import DataContext from '../context/Data';
 import Dates from './Dates';
-import Coords from './Coords';
+import Regions from './Regions';
 
 export interface Form {
   startDate: Dayjs | null;
@@ -34,13 +35,34 @@ const initial = {
 const Search = () => {
   const { fetchData } = useContext(DataContext);
   const [form, setForm] = useState<Form>(initial);
+  const [_features, setFeatures] = useState<Feature[]>([]);
 
-  const handleDateChange = (id: string, value: Dayjs | null) => {
+  const handleCreate = useCallback((event: { features: Feature[] }) => {
+    setFeatures((currFeatures) => {
+      const created: Feature = { ...event.features[0] };
+      return [...currFeatures, created];
+    });
+  }, []);
+
+  const handleUpdate = useCallback((event: { features: Feature[] }) => {
+    setFeatures((currFeatures) => {
+      const updated: Feature = { ...event.features[0] };
+      return currFeatures.map((feature) => {
+        if (feature.id === updated.id) return updated;
+        return feature;
+      });
+    });
+  }, []);
+
+  const handleDelete = useCallback((event: { features: Feature[] }) => {
+    setFeatures((currFeatures) => {
+      const deleted: Feature = { ...event.features[0] };
+      return currFeatures.filter((feature) => feature.id !== deleted.id);
+    });
+  }, []);
+
+  const handleChange = (id: string, value: Dayjs | null) => {
     setForm({ ...form, [id]: value });
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [event.target.id]: event.target.value });
   };
 
   const handleClear = () => setForm(initial);
@@ -56,49 +78,30 @@ const Search = () => {
         title='Date Range'
         start={{ id: 'startDate', value: form.startDate }}
         end={{ id: 'endDate', value: form.endDate }}
-        onChange={handleDateChange}
-      />
-
-      <Coords
-        title='NW Coords'
-        lat={{ id: 'nwLat', value: form.nwLat }}
-        lon={{ id: 'nwLon', value: form.nwLon }}
         onChange={handleChange}
       />
 
-      <Coords
-        title='NE Coords'
-        lat={{ id: 'neLat', value: form.neLat }}
-        lon={{ id: 'neLon', value: form.neLon }}
-        onChange={handleChange}
+      <Regions
+        title='Select Region'
+        onCreate={handleCreate}
+        onUpdate={handleUpdate}
+        onDelete={handleDelete}
       />
 
-      <Coords
-        title='SW Coords'
-        lat={{ id: 'swLat', value: form.swLat }}
-        lon={{ id: 'swLon', value: form.swLon }}
-        onChange={handleChange}
-      />
+      <Box sx={{ mt: 2 }}>
+        <Button
+          variant='contained'
+          color='error'
+          onClick={handleClear}
+          sx={{ mr: 2 }}
+        >
+          Clear
+        </Button>
 
-      <Coords
-        title='SE Coords'
-        lat={{ id: 'seLat', value: form.seLat }}
-        lon={{ id: 'seLon', value: form.seLon }}
-        onChange={handleChange}
-      />
-
-      <Button
-        variant='contained'
-        color='error'
-        onClick={handleClear}
-        sx={{ mr: 2 }}
-      >
-        Clear
-      </Button>
-
-      <Button type='submit' variant='contained'>
-        Search
-      </Button>
+        <Button type='submit' variant='contained'>
+          Search
+        </Button>
+      </Box>
     </Box>
   );
 };

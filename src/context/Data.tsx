@@ -18,7 +18,7 @@ const DataContext = createContext<Data>({
 });
 
 const DataProvider = ({ children }: { children: React.ReactElement }) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<object[]>([]);
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);

@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from '@mui/material';
-import Map, { Marker, GeolocateControl } from 'react-map-gl';
+import Map from 'react-map-gl';
 
 const Results = () => {
   return (
@@ -23,9 +23,7 @@ const Results = () => {
             style={{ height: 600 }}
             mapStyle='mapbox://styles/mapbox/streets-v9'
             mapboxAccessToken={import.meta.env.VITE_MAP_TOKEN}
-          >
-            <GeolocateControl />
-          </Map>
+          />
         </Grid>
       </Grid>
     </Box>
