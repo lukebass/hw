@@ -1,21 +1,49 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { useMemo } from 'react';
+import {
+  Box,
+  Grid,
+  Typography,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+} from '@mui/material';
 import Map, { GeolocateControl } from 'react-map-gl';
-import { Feature } from 'geojson';
+import { Feature, Polygon } from 'geojson';
 import MapControl from './MapControl';
 
 interface RegionsProps {
   title: string;
-  onCreate: (event: { features: Feature[] }) => void;
-  onUpdate: (event: { features: Feature[]; action: string }) => void;
-  onDelete: (event: { features: Feature[] }) => void;
+  selected: Feature<Polygon>[];
+  onCreate: (event: { features: Feature<Polygon>[] }) => void;
+  onUpdate: (event: { features: Feature<Polygon>[] }) => void;
+  onDelete: (event: { features: Feature<Polygon>[] }) => void;
 }
 
 const Regions: React.FC<RegionsProps> = ({
   title,
+  selected,
   onCreate,
   onUpdate,
   onDelete,
 }) => {
+  const regions = useMemo(
+    () =>
+      selected.map(({ id, geometry: { coordinates } }) =>
+        coordinates[0].map((coordinate, key) => (
+          <TableRow key={`${id}-${key}`}>
+            <TableCell>{id}</TableCell>
+            <TableCell>{coordinate[0]}</TableCell>
+            <TableCell>{coordinate[1]}</TableCell>
+          </TableRow>
+        ))
+      ),
+    [selected]
+  );
+
   return (
     <Box sx={{ mb: 2 }}>
       <Typography variant='h6' sx={{ mb: 2 }}>
@@ -23,7 +51,7 @@ const Regions: React.FC<RegionsProps> = ({
       </Typography>
 
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <Map
             initialViewState={{
               latitude: 37.8,
@@ -45,6 +73,20 @@ const Regions: React.FC<RegionsProps> = ({
               onDelete={onDelete}
             />
           </Map>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Latitude</TableCell>
+                  <TableCell>Longitude</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{regions}</TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
       </Grid>
     </Box>

@@ -1,7 +1,7 @@
 import { useState, useContext, useCallback } from 'react';
 import { Button, Box } from '@mui/material';
 import { Dayjs } from 'dayjs';
-import { Feature } from 'geojson';
+import { Feature, Polygon } from 'geojson';
 import DataContext from '../context/Data';
 import Dates from './Dates';
 import Regions from './Regions';
@@ -9,67 +9,63 @@ import Regions from './Regions';
 export interface Form {
   startDate: Dayjs | null;
   endDate: Dayjs | null;
-  nwLat: string;
-  nwLon: string;
-  neLat: string;
-  neLon: string;
-  swLat: string;
-  swLon: string;
-  seLat: string;
-  seLon: string;
 }
 
 const initial = {
   startDate: null,
   endDate: null,
-  nwLat: '',
-  nwLon: '',
-  neLat: '',
-  neLon: '',
-  swLat: '',
-  swLon: '',
-  seLat: '',
-  seLon: '',
 };
 
 const Search = () => {
   const { fetchData } = useContext(DataContext);
   const [form, setForm] = useState<Form>(initial);
-  const [_features, setFeatures] = useState<Feature[]>([]);
+  const [features, setFeatures] = useState<Feature<Polygon>[]>([]);
 
-  const handleCreate = useCallback((event: { features: Feature[] }) => {
-    setFeatures((currFeatures) => {
-      const created: Feature = { ...event.features[0] };
-      return [...currFeatures, created];
-    });
-  }, []);
-
-  const handleUpdate = useCallback((event: { features: Feature[] }) => {
-    setFeatures((currFeatures) => {
-      const updated: Feature = { ...event.features[0] };
-      return currFeatures.map((feature) => {
-        if (feature.id === updated.id) return updated;
-        return feature;
+  const handleCreate = useCallback(
+    (event: { features: Feature<Polygon>[] }) => {
+      setFeatures((currFeatures) => {
+        const created: Feature<Polygon> = { ...event.features[0] };
+        return [...currFeatures, created];
       });
-    });
-  }, []);
+    },
+    []
+  );
 
-  const handleDelete = useCallback((event: { features: Feature[] }) => {
-    setFeatures((currFeatures) => {
-      const deleted: Feature = { ...event.features[0] };
-      return currFeatures.filter((feature) => feature.id !== deleted.id);
-    });
-  }, []);
+  const handleUpdate = useCallback(
+    (event: { features: Feature<Polygon>[] }) => {
+      setFeatures((currFeatures) => {
+        const updated: Feature<Polygon> = { ...event.features[0] };
+        return currFeatures.map((feature) => {
+          if (feature.id === updated.id) return updated;
+          return feature;
+        });
+      });
+    },
+    []
+  );
+
+  const handleDelete = useCallback(
+    (event: { features: Feature<Polygon>[] }) => {
+      setFeatures((currFeatures) => {
+        const deleted: Feature<Polygon> = { ...event.features[0] };
+        return currFeatures.filter((feature) => feature.id !== deleted.id);
+      });
+    },
+    []
+  );
 
   const handleChange = (id: string, value: Dayjs | null) => {
     setForm({ ...form, [id]: value });
   };
 
-  const handleClear = () => setForm(initial);
+  const handleClear = () => {
+    setForm(initial);
+    setFeatures([]);
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetchData(form);
+    fetchData(form, features[0]);
   };
 
   return (
@@ -83,6 +79,7 @@ const Search = () => {
 
       <Regions
         title='Select Region'
+        selected={features}
         onCreate={handleCreate}
         onUpdate={handleUpdate}
         onDelete={handleDelete}

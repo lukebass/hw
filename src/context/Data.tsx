@@ -1,12 +1,13 @@
 import { createContext, useState } from 'react';
 import { genToken, search } from '../utils/api';
 import { Form } from '../components/Search';
+import { Feature, Polygon } from 'geojson';
 import { transform } from '../utils/transform';
 
 interface Data {
   data: object[];
   error: string | null;
-  fetchData: (search: Form) => void;
+  fetchData: (form: Form, feature: Feature<Polygon>) => void;
   isFetching: boolean;
 }
 
@@ -23,7 +24,7 @@ const DataProvider = ({ children }: { children: React.ReactElement }) => {
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
-  const fetchData = async (form: Form) => {
+  const fetchData = async (form: Form, feature: Feature<Polygon>) => {
     setError(null);
     setIsFetching(true);
 
@@ -41,7 +42,7 @@ const DataProvider = ({ children }: { children: React.ReactElement }) => {
     //   else setError('Error fetching data');
     // }
 
-    console.log(transform(form));
+    console.log(transform(form, feature));
 
     setIsFetching(false);
   };
