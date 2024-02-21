@@ -6,7 +6,7 @@ Earth observation satellites capture images that are associated with a location,
 
 - Clone repository
 - Run `npm install`
-- Create env.local file
+- Create `env.local` file
 - Run `npm run dev`
 
 ## Example Env
@@ -24,4 +24,4 @@ VITE_MAP_TOKEN=pk.eyJ1IjoibHVrZWJhc3MiLCJhIjoiY2xzbGFreGNzMGQyZDJpcDVyNDY4Z2ZxeS
 - Start and End date are required
 - Region search is optional
 - Search results are clickable
-- View results on map
+- View search results on map
