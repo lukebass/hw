@@ -1,5 +1,6 @@
 import { FeatureCollection, Polygon } from 'geojson';
 import { SearchParams } from './transform';
+import dayjs from 'dayjs';
 
 export const genToken = async (): Promise<string> => {
   const response = await fetch(import.meta.env.VITE_ED_TOKEN, {
@@ -16,16 +17,29 @@ export const genToken = async (): Promise<string> => {
 
   if (!response.ok) throw new Error('Error fetching token');
 
-  const { access_token } = await response.json();
-  localStorage.setItem('access_token', access_token);
+  const { access_token, expires_in } = await response.json();
+  localStorage.setItem(
+    'access_token',
+    JSON.stringify({
+      token: access_token,
+      expires: dayjs().add(expires_in, 'second'),
+    })
+  );
   return access_token;
+};
+
+export const getToken = (): Promise<string> => {
+  const currToken = localStorage.getItem('access_token');
+  if (!currToken) return genToken();
+  const { token, expires } = JSON.parse(currToken);
+  if (dayjs() >= dayjs(expires)) return genToken();
+  return token;
 };
 
 export const search = async (
   params: SearchParams
 ): Promise<FeatureCollection<Polygon>> => {
-  let token = localStorage.getItem('access_token');
-  if (!token) token = await genToken();
+  const token = await getToken();
 
   const response = await fetch(import.meta.env.VITE_ED_SEARCH, {
     method: 'POST',

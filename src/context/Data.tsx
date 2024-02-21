@@ -30,6 +30,7 @@ const DataProvider = ({ children }: { children: React.ReactElement }) => {
   const [isFetching, setIsFetching] = useState(false);
 
   const fetchData = async (form: Form, feature: Feature<Polygon>) => {
+    setData({ type: 'FeatureCollection', features: [] });
     setError(null);
     setIsFetching(true);
 
