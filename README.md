@@ -2,8 +2,6 @@
 
 # EarthDaily Homework
 
-Earth observation satellites capture images that are associated with a location, time and other attributes. A list of these images are stored in a catalog that provides queryability to allow end users to find what they want.
-
 ## Setup
 
 - Clone repository
