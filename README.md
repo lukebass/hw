@@ -6,7 +6,7 @@ Earth observation satellites capture images that are associated with a location,
 
 - Clone repository
 - Run `npm install`
-- Create `env.local` file
+- Create `.env.local` file
 - Run `npm run dev`
 
 ## Example Env
