@@ -4,7 +4,7 @@ import { Dayjs } from 'dayjs';
 import { Feature, Polygon } from 'geojson';
 import DataContext from '../context/Data';
 import Dates from './Dates';
-import Regions from './Regions';
+import Region from './Region';
 
 export interface Form {
   startDate: Dayjs | null;
@@ -17,40 +17,26 @@ const Search = () => {
     startDate: null,
     endDate: null,
   });
-  const [features, setFeatures] = useState<Feature<Polygon>[]>([]);
+  const [polygon, setPolygon] = useState<Feature<Polygon> | null>(null);
 
   const handleCreate = useCallback(
     (event: { features: Feature<Polygon>[] }) => {
-      setFeatures((currFeatures) => {
-        const created: Feature<Polygon> = { ...event.features[0] };
-        return [...currFeatures, created];
-      });
+      const polygon: Feature<Polygon> = { ...event.features[0] };
+      setPolygon(polygon);
     },
     []
   );
 
   const handleUpdate = useCallback(
     (event: { features: Feature<Polygon>[] }) => {
-      setFeatures((currFeatures) => {
-        const updated: Feature<Polygon> = { ...event.features[0] };
-        return currFeatures.map((feature) => {
-          if (feature.id === updated.id) return updated;
-          return feature;
-        });
-      });
+      setPolygon({ ...event.features[0] });
     },
     []
   );
 
-  const handleDelete = useCallback(
-    (event: { features: Feature<Polygon>[] }) => {
-      setFeatures((currFeatures) => {
-        const deleted: Feature<Polygon> = { ...event.features[0] };
-        return currFeatures.filter((feature) => feature.id !== deleted.id);
-      });
-    },
-    []
-  );
+  const handleDelete = useCallback(() => {
+    setPolygon(null);
+  }, []);
 
   const handleChange = (id: string, value: Dayjs | null) => {
     setForm({ ...form, [id]: value });
@@ -58,12 +44,12 @@ const Search = () => {
 
   const handleClear = () => {
     setForm({ startDate: null, endDate: null });
-    setFeatures([]);
+    setPolygon(null);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetchData(form, features[0]);
+    fetchData(form, polygon);
   };
 
   return (
@@ -89,9 +75,9 @@ const Search = () => {
         onChange={handleChange}
       />
 
-      <Regions
+      <Region
         title='Select Region'
-        selected={features}
+        selected={polygon}
         onCreate={handleCreate}
         onUpdate={handleUpdate}
         onDelete={handleDelete}

@@ -11,21 +11,20 @@ import {
   TableBody,
   Paper,
   Chip,
-  Stack,
 } from '@mui/material';
 import Map, { GeolocateControl } from 'react-map-gl';
 import { Feature, Polygon } from 'geojson';
 import MapControl from './MapControl';
 
-interface RegionsProps {
+interface RegionProps {
   title: string;
-  selected: Feature<Polygon>[];
+  selected: Feature<Polygon> | null;
   onCreate: (event: { features: Feature<Polygon>[] }) => void;
   onUpdate: (event: { features: Feature<Polygon>[] }) => void;
-  onDelete: (event: { features: Feature<Polygon>[] }) => void;
+  onDelete: () => void;
 }
 
-const Regions: React.FC<RegionsProps> = ({
+const Region: React.FC<RegionProps> = ({
   title,
   selected,
   onCreate,
@@ -34,30 +33,28 @@ const Regions: React.FC<RegionsProps> = ({
 }) => {
   const regions = useMemo(
     () =>
-      selected.length ? (
-        selected.map(({ id, geometry: { type, coordinates } }) => (
-          <TableRow key={id}>
-            <TableCell>{id}</TableCell>
-            <TableCell>{type}</TableCell>
+      selected ? (
+        selected.geometry.coordinates[0].map((coords, key) => (
+          <TableRow key={key}>
             <TableCell>
-              <Stack spacing={1}>
-                {coordinates[0].map((coords, key) => (
-                  <Chip
-                    key={key}
-                    color='primary'
-                    variant='outlined'
-                    label={coords
-                      .map((coord) => coord.toString().substring(0, 10))
-                      .join(', ')}
-                  />
-                ))}
-              </Stack>
+              <Chip
+                color='primary'
+                variant='outlined'
+                label={coords[1].toString().substring(0, 10)}
+              />
+            </TableCell>
+            <TableCell>
+              <Chip
+                color='primary'
+                variant='outlined'
+                label={coords[0].toString().substring(0, 10)}
+              />
             </TableCell>
           </TableRow>
         ))
       ) : (
         <TableRow>
-          <TableCell colSpan={3} align='center'>
+          <TableCell colSpan={2} align='center'>
             No regions selected!
           </TableCell>
         </TableRow>
@@ -100,9 +97,8 @@ const Regions: React.FC<RegionsProps> = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Type</TableCell>
-                  <TableCell>Coordinates</TableCell>
+                  <TableCell>Latitude</TableCell>
+                  <TableCell>Longitude</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>{regions}</TableBody>
@@ -114,4 +110,4 @@ const Regions: React.FC<RegionsProps> = ({
   );
 };
 
-export default Regions;
+export default Region;

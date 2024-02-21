@@ -8,7 +8,7 @@ export interface SearchParams {
 
 export const transform = (
   form: Form,
-  feature: Feature<Polygon> | undefined
+  feature: Feature<Polygon> | null
 ): SearchParams => {
   const transformed: SearchParams = {
     datetime: `${form.startDate?.toISOString()}/${form.endDate?.toISOString()}`,

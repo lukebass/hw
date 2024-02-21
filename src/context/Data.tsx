@@ -7,7 +7,7 @@ import { transform } from '../utils/transform';
 interface Data {
   data: FeatureCollection<Polygon>;
   error: string | null;
-  fetchData: (form: Form, feature: Feature<Polygon>) => void;
+  fetchData: (form: Form, feature: Feature<Polygon> | null) => void;
   isFetching: boolean;
 }
 
@@ -29,7 +29,7 @@ const DataProvider = ({ children }: { children: React.ReactElement }) => {
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
-  const fetchData = async (form: Form, feature: Feature<Polygon>) => {
+  const fetchData = async (form: Form, feature: Feature<Polygon> | null) => {
     setData({ type: 'FeatureCollection', features: [] });
     setError(null);
     setIsFetching(true);
