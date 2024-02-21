@@ -8,7 +8,7 @@ Earth observation satellites capture images that are associated with a location,
 - Install node lts
 - Run `npm install`
 - Create `.env.local` file
-- Populate `.env.local` file (see below)
+- Populate `.env.local` file (see example)
 - Run `npm run dev`
 
 ## Example Env
@@ -30,13 +30,15 @@ VITE_MAP_TOKEN=pk.eyJ1IjoibHVrZWJhc3MiLCJhIjoiY2xzbGFreGNzMGQyZDJpcDVyNDY4Z2ZxeS
 - Search results are clickable
 - View search results on map
 
-### Dependencies
+## Dependencies
 
 - Vite
 - TypeScript
 - React
 - Material UI
 - Material UI X
+- Emotion
 - Mapbox GL
 - React Mapbox GL
 - Mapbox GL Draw
+- DayJS
