@@ -21,8 +21,7 @@ const Search = () => {
 
   const handleCreate = useCallback(
     (event: { features: Feature<Polygon>[] }) => {
-      const polygon: Feature<Polygon> = { ...event.features[0] };
-      setPolygon(polygon);
+      setPolygon({ ...event.features[0] });
     },
     []
   );
