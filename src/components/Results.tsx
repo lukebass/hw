@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Typography,
@@ -34,6 +34,16 @@ const Results = () => {
     longitude: -123.1207,
     zoom: 8,
   });
+
+  useEffect(() => {
+    if (data.features.length) {
+      setViewState({
+        latitude: data.features[0].geometry.coordinates[0][0][1],
+        longitude: data.features[0].geometry.coordinates[0][0][0],
+        zoom: 8,
+      });
+    }
+  }, [data]);
 
   const handleClick = (coordinates: Position[][]) => {
     setViewState({
