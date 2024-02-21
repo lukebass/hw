@@ -35,9 +35,10 @@ const Regions: React.FC<RegionsProps> = ({
   const regions = useMemo(
     () =>
       selected.length ? (
-        selected.map(({ id, geometry: { coordinates } }) => (
+        selected.map(({ id, geometry: { type, coordinates } }) => (
           <TableRow key={id}>
             <TableCell>{id}</TableCell>
+            <TableCell>{type}</TableCell>
             <TableCell>
               <Stack spacing={1}>
                 {coordinates[0].map((coords, key) => (
@@ -56,7 +57,7 @@ const Regions: React.FC<RegionsProps> = ({
         ))
       ) : (
         <TableRow>
-          <TableCell colSpan={2} align='center'>
+          <TableCell colSpan={3} align='center'>
             No regions selected!
           </TableCell>
         </TableRow>
@@ -100,6 +101,7 @@ const Regions: React.FC<RegionsProps> = ({
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
+                  <TableCell>Type</TableCell>
                   <TableCell>Coordinates</TableCell>
                 </TableRow>
               </TableHead>
