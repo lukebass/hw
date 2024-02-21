@@ -1,47 +1,46 @@
 import { createContext, useState } from 'react';
-import { genToken, search } from '../utils/api';
+import { search } from '../utils/api';
 import { Form } from '../components/Search';
+import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { transform } from '../utils/transform';
 
 interface Data {
-  data: object[];
+  data: FeatureCollection<Polygon>;
   error: string | null;
-  fetchData: (search: Form) => void;
+  fetchData: (form: Form, feature: Feature<Polygon>) => void;
   isFetching: boolean;
 }
 
 const DataContext = createContext<Data>({
-  data: [],
+  data: {
+    type: 'FeatureCollection',
+    features: [],
+  },
   error: null,
   fetchData: () => {},
   isFetching: false,
 });
 
 const DataProvider = ({ children }: { children: React.ReactElement }) => {
-  const [data, setData] = useState([]);
-  const [token, setToken] = useState<string | null>(null);
+  const [data, setData] = useState<FeatureCollection<Polygon>>({
+    type: 'FeatureCollection',
+    features: [],
+  });
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
-  const fetchData = async (form: Form) => {
+  const fetchData = async (form: Form, feature: Feature<Polygon>) => {
+    setData({ type: 'FeatureCollection', features: [] });
     setError(null);
     setIsFetching(true);
 
-    // try {
-    //   let currToken = token;
-    //   if (!currToken) {
-    //     currToken = await genToken();
-    //     setToken(currToken);
-    //   }
-
-    //   const data = await search(currToken);
-    //   setData(data);
-    // } catch (error) {
-    //   if (error instanceof Error) setError(error.message);
-    //   else setError('Error fetching data');
-    // }
-
-    console.log(transform(form));
+    try {
+      const data = await search(transform(form, feature));
+      setData(data);
+    } catch (error) {
+      if (error instanceof Error) setError(error.message);
+      else setError('Error fetching data');
+    }
 
     setIsFetching(false);
   };

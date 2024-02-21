@@ -7,10 +7,18 @@ interface DatesProps {
   start: {
     id: string;
     value: Dayjs | null;
+    props: {
+      required: boolean;
+      helperText: string | boolean;
+    };
   };
   end: {
     id: string;
     value: Dayjs | null;
+    props: {
+      required: boolean;
+      helperText: string | boolean;
+    };
   };
   onChange: (id: string, value: Dayjs | null) => void;
 }
@@ -30,6 +38,7 @@ const Dates: React.FC<DatesProps> = ({ title, start, end, onChange }) => {
             onChange={(value) => onChange(start.id, value)}
             sx={{ width: '100%' }}
             maxDate={end.value}
+            slotProps={{ textField: { ...start.props } }}
             disableFuture
           />
         </Grid>
@@ -41,6 +50,7 @@ const Dates: React.FC<DatesProps> = ({ title, start, end, onChange }) => {
             onChange={(value) => onChange(end.id, value)}
             sx={{ width: '100%' }}
             minDate={start.value}
+            slotProps={{ textField: { ...start.props } }}
             disableFuture
           />
         </Grid>
