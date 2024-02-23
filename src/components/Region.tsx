@@ -19,7 +19,6 @@ import MapControl from './MapControl';
 interface RegionProps {
   title: string;
   selected: Feature<Polygon> | null;
-  onCreate: (event: { features: Feature<Polygon>[] }) => void;
   onUpdate: (event: { features: Feature<Polygon>[] }) => void;
   onDelete: () => void;
 }
@@ -27,7 +26,6 @@ interface RegionProps {
 const Region: React.FC<RegionProps> = ({
   title,
   selected,
-  onCreate,
   onUpdate,
   onDelete,
 }) => {
@@ -86,7 +84,7 @@ const Region: React.FC<RegionProps> = ({
               displayControlsDefault={false}
               controls={{ polygon: true, trash: true }}
               defaultMode='draw_polygon'
-              onCreate={onCreate}
+              onCreate={onUpdate}
               onUpdate={onUpdate}
               onDelete={onDelete}
             />

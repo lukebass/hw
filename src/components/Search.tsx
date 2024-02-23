@@ -11,31 +11,18 @@ export interface Form {
   endDate: Dayjs | null;
 }
 
-const Search = () => {
+const Search: React.FC = () => {
   const { fetchData, isFetching } = useContext(DataContext);
-  const [form, setForm] = useState<Form>({
-    startDate: null,
-    endDate: null,
-  });
+  const [form, setForm] = useState<Form>({ startDate: null, endDate: null });
   const [polygon, setPolygon] = useState<Feature<Polygon> | null>(null);
 
-  const handleCreate = useCallback(
-    (event: { features: Feature<Polygon>[] }) => {
-      setPolygon({ ...event.features[0] });
-    },
-    []
-  );
-
   const handleUpdate = useCallback(
-    (event: { features: Feature<Polygon>[] }) => {
-      setPolygon({ ...event.features[0] });
-    },
+    (event: { features: Feature<Polygon>[] }) =>
+      setPolygon({ ...event.features[0] }),
     []
   );
 
-  const handleDelete = useCallback(() => {
-    setPolygon(null);
-  }, []);
+  const handleDelete = useCallback(() => setPolygon(null), []);
 
   const handleChange = (id: string, value: Dayjs | null) => {
     setForm({ ...form, [id]: value });
@@ -77,12 +64,11 @@ const Search = () => {
       <Region
         title='Select Region'
         selected={polygon}
-        onCreate={handleCreate}
         onUpdate={handleUpdate}
         onDelete={handleDelete}
       />
 
-      <Box sx={{ mt: 2, textAlign: 'right' }}>
+      <Box display='flex' justifyContent='flex-end'>
         <Button
           variant='contained'
           color='error'
