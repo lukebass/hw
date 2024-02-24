@@ -13,6 +13,7 @@ import {
   Chip,
   Link,
   CircularProgress,
+  Alert,
 } from '@mui/material';
 import Map, { Source, Layer, FillLayer } from 'react-map-gl';
 import { Position } from 'geojson';
@@ -28,7 +29,7 @@ const layerStyle: FillLayer = {
 };
 
 const Results: React.FC = () => {
-  const { data, isFetching } = useContext(DataContext);
+  const { data, isFetching, error, clearError } = useContext(DataContext);
   const [viewState, setViewState] = useState({
     latitude: 49.2827,
     longitude: -123.1207,
@@ -103,6 +104,12 @@ const Results: React.FC = () => {
 
   return (
     <Box sx={{ my: 4 }}>
+      {!!error && (
+        <Alert severity='error' onClose={clearError} sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
       <Typography variant='h6' sx={{ mb: 2 }}>
         Search Results
       </Typography>

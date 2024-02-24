@@ -7,6 +7,7 @@ import { transform } from '../utils/transform';
 interface Data {
   data: FeatureCollection<Polygon>;
   error: string | null;
+  clearError: () => void;
   fetchData: (form: Form, feature: Feature<Polygon> | null) => void;
   isFetching: boolean;
 }
@@ -17,6 +18,7 @@ const DataContext = createContext<Data>({
     features: [],
   },
   error: null,
+  clearError: () => {},
   fetchData: () => {},
   isFetching: false,
 });
@@ -28,6 +30,8 @@ const DataProvider = ({ children }: { children: React.ReactElement }) => {
   });
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
+
+  const clearError = () => setError(null);
 
   const fetchData = async (form: Form, feature: Feature<Polygon> | null) => {
     setData({ type: 'FeatureCollection', features: [] });
@@ -50,6 +54,7 @@ const DataProvider = ({ children }: { children: React.ReactElement }) => {
       value={{
         data,
         error,
+        clearError,
         fetchData,
         isFetching,
       }}
