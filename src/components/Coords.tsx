@@ -13,7 +13,7 @@ interface CoordsProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Coords: React.FC<CoordsProps> = ({ title, lat, lon, onChange }) => {
+const Coords = ({ title, lat, lon, onChange }: CoordsProps) => {
   return (
     <Box sx={{ mb: 2 }}>
       <Typography variant='h6' sx={{ mb: 2 }}>

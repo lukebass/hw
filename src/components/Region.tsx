@@ -23,12 +23,7 @@ interface RegionProps {
   onDelete: () => void;
 }
 
-const Region: React.FC<RegionProps> = ({
-  title,
-  selected,
-  onUpdate,
-  onDelete,
-}) => {
+const Region = ({ title, selected, onUpdate, onDelete }: RegionProps) => {
   const regions = useMemo(
     () =>
       selected ? (

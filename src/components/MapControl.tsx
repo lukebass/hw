@@ -11,7 +11,7 @@ interface MapControlProps extends MapboxDraw.MapboxDrawOptions {
   onDelete: () => void;
 }
 
-const MapControl: React.FC<MapControlProps> = (props) => {
+const MapControl = (props: MapControlProps) => {
   const draw = useControl<MapboxDraw>(
     () => new MapboxDraw(props),
     ({ map }) => {

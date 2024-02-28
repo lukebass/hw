@@ -11,7 +11,7 @@ export interface Form {
   endDate: Dayjs | null;
 }
 
-const Search: React.FC = () => {
+const Search = () => {
   const { fetchData, isFetching } = useContext(DataContext);
   const [form, setForm] = useState<Form>({ startDate: null, endDate: null });
   const [polygon, setPolygon] = useState<Feature<Polygon> | null>(null);

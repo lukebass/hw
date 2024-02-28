@@ -3,7 +3,7 @@ import logo from './assets/logo.svg';
 import Search from './components/Search';
 import Results from './components/Results';
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <Container>
       <Box sx={{ my: 2 }}>

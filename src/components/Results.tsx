@@ -28,7 +28,7 @@ const layerStyle: FillLayer = {
   },
 };
 
-const Results: React.FC = () => {
+const Results = () => {
   const { data, isFetching, error, clearError } = useContext(DataContext);
   const [viewState, setViewState] = useState({
     latitude: 49.2827,

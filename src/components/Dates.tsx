@@ -23,7 +23,7 @@ interface DatesProps {
   onChange: (id: string, value: Dayjs | null) => void;
 }
 
-const Dates: React.FC<DatesProps> = ({ title, start, end, onChange }) => {
+const Dates = ({ title, start, end, onChange }: DatesProps) => {
   return (
     <Box sx={{ mb: 2 }}>
       <Typography variant='h6' sx={{ mb: 2 }}>
